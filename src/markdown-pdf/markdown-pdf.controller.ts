@@ -8,6 +8,7 @@ export class MarkdownPdfController {
 
     @Post()
     async markdownToPdf(@Body() body: { text: string, fileName: string }) {
+        console.log(body)
         if (!body.fileName) {
             body.fileName = '_' + Math.random().toString(36).substr(2, 9)
         }
