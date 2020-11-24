@@ -6,13 +6,20 @@ export class MarkdownPdfController {
 
     constructor(private markdownPdfService: MarkdownPdfService) { }
 
+    /**
+     * Convert markdown to PDF.
+     * Markdown must be converted with encodeURIComponent in JSON Object
+     * @param body 
+     */
     @Post()
     async markdownToPdf(@Body() body: { text: string, fileName: string }) {
         console.log(body)
-        if (!body.fileName) {
-            body.fileName = '_' + Math.random().toString(36).substr(2, 9)
+        let mdTxt = decodeURIComponent(body.text)
+        let fileName = body.fileName
+        if (!fileName) {
+            fileName = '_' + Math.random().toString(36).substr(2, 9)
         }
-        return this.markdownPdfService.markdownToPdf(body.text, body.fileName)
+        return this.markdownPdfService.markdownToPdf(mdTxt, fileName)
     }
 
 }
