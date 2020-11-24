@@ -45,29 +45,74 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
+## A. Énoncé et Questions:
+Vous êtes dans la peau d'un.e développeur.se travaillant sur un nouveau projet pour une application
+métier d'édition de contenu à imprimer.
+Vous êtes responsable de la réalisation du front de l'application. Il a été décidé que l'application serait
+en Typescript avec React.
+Durant la réunion de cadrage vous avez eu les informations suivantes:
+-L'application doit posséder un système d'authentification avec une gestion des roles simple
+(utilisateur, admin)
+-L'administrateur doit pouvoir ajouter un certain nombre de documents type avec les données
+nécessaires à la génération. Ces documents sont considérés comme des "templates".
+-Un utilisateur peut accéder uniquement à ses documents générés
+-Un utilisateur doit pouvoir générer un document depuis un "template" créer par un administrateur
+en fournissant les champs requis.
 
-# test coverage
-$ npm run test:cov
+
+## Questions de réflexion:
+Vous devez répondre aux questions suivantes (chaque question attend une réponse suivie d'une
+explication):
+Quelle base(s) de données allez-vous utiliser ?
+```
+Je travaillerais avec une base de donnée SQL
 ```
 
-## Support
+Quelles librairies allez-vous utiliser pour communiquer votre base de données ?
+```
+J'ai pour habitude de travailler avec TypeORM pour faire le lien avec la BDD
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Quelles sont les routes nécessaires ?
+```
+Pour commencer il y a les routes d'identification :
+-login
+-création de compte
 
-## Stay in touch
+Ensuite les routes dédiés la gestion des documents de l'user:
+-lister tous mes documents
+-afficher 1 document
+-créer un nouveau document
+-modifier un document
+-supprimer un document
+-...
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Pour terminer, il y a les endpoints réservé à l'admin
+-Modification des roles users
+-Ajouter template
+-Modifer Template
+-Supprimer template
+-...
+```
 
-## License
+Comment allez-vous gérer la validation du contenu des requêtes ?
+```
+Bonne question, je dois reconnaitre que j'ai toujours fait ce travail manuellement en vérifiant les données recu dans chaque endpoint, mais il y a surement plus simple.
+```
 
-Nest is [MIT licensed](LICENSE).
+Comment allez-vous gérer la pagination des requêtes ?
+```
+Comme pour la réponse précédente, j'ai pour habitude de me créer mon propre system de pagination. Je met en Query des valeurs tels que la page voulue et le nombre d'élément par page, et je répercute ses valeurs dans la recherche via l'ORM.
+```
+Comment allez-vous gérer l'authentification ?
+```
+Après envois et validation des informations de connection (username, password), une JWT token est généré avec une date de validitée et elle est envoyé dans le header de chaque requete faite par le client.
+Un refresh tocken est aussi généré et stocké en base de donnée. Quand la JWT arrive a expiration, le client envoie le refreshTocken afin qu'un nouveau JWT soit généré.
+```
+
+Bonus: Comment allez-vous gérer les permissions d'accès ?
+```
+Via un midleware qui bloque la route si l'utilisateur (identifié par JWT) n'as pas le role requi.
+```
